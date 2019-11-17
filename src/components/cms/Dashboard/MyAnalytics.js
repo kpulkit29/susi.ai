@@ -3,9 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import uiActions from '../../../redux/actions/ui';
-import _Link from '../../shared/Link';
-import Add from '@material-ui/icons/Add';
-import Button from '../../shared/Button';
 import CircularLoader from '../../shared/CircularLoader';
 import { fetchSkillsByAuthor } from '../../../apis';
 import { Cell } from 'recharts';
@@ -19,22 +16,13 @@ const Container = styled.div`
   }
 `;
 
-const Link = styled(_Link)`
-  float: right;
-  margin-right: 1.25rem;
-  display: block;
-  @media (max-width: 600px) {
-    float: left;
-    margin-left: 1.25rem;
-  }
-`;
-
 class MyAnalytics extends Component {
   constructor(props) {
     super(props);
     this.state = {
       skillUsage: [],
       loading: true,
+      userSkills: 0,
       skillUsageCount: 0,
     };
   }
@@ -74,12 +62,13 @@ class MyAnalytics extends Component {
     });
     this.setState({
       skillUsage,
+      userSkills: data.length,
       skillUsageCount,
     });
   };
 
   render() {
-    let { skillUsage, loading, skillUsageCount } = this.state;
+    let { skillUsage, loading, skillUsageCount, userSkills } = this.state;
     return (
       <div>
         {loading ? (
@@ -108,13 +97,20 @@ class MyAnalytics extends Component {
             )}
           </Container>
         )}
-        {skillUsageCount === 0 && !loading && (
+        {skillUsageCount === 0 && userSkills > 0 && !loading && (
           <Container>
-            <Link to="/skillWizard">
-              <Button variant="contained" color="primary">
-                <Add /> Create Skill
-              </Button>
-            </Link>
+            <div className="center">
+              <br />
+              <h2 style={{ textAlign: 'center' }}>
+                Your skill has not been used, make sure to improve your skill to
+                attract more users.
+              </h2>
+              <br />
+            </div>
+          </Container>
+        )}
+        {userSkills === 0 && !loading && (
+          <Container>
             <div className="center">
               <br />
               <h2 style={{ textAlign: 'center' }}>
