@@ -17,6 +17,7 @@ import CloseButton from '../../shared/CloseButton';
 import Translate from '../../Translate/Translate.react';
 import { cookieDomain } from '../../../utils/helperFunctions';
 import { isEmail } from '../../../utils';
+import storageService from '../../../utils/storageService';
 import { createMessagePairArray } from '../../../utils/formatMessage';
 import Recaptcha from '../../shared/Recaptcha';
 import {
@@ -53,13 +54,13 @@ class Login extends Component {
       success: false,
       loading: false,
       showCaptchaErrorMessage: false,
-      attempts: sessionStorage.getItem('loginAttempts') || 0,
+      attempts: storageService.get('loginAttempts', 'session') || 0,
       captchaResponse: '',
     };
   }
 
   componentWillUnmount() {
-    sessionStorage.setItem('loginAttempts', this.state.attempts);
+    storageService.set('loginAttempts', this.state.attempts, 'session');
   }
 
   handleDialogClose = () => {
