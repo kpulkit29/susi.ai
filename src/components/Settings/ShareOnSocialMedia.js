@@ -1,163 +1,110 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import SettingsTabWrapper from './SettingsTabWrapper';
-import Icon from '@material-ui/core/Icon';
-import Button from '@material-ui/core/Button';
-import Translate from '../Translate/Translate.react';
-import urls from '../../utils/urls';
-import { withStyles } from '@material-ui/core/styles';
-import { TabHeading } from './SettingStyles';
+import _IconButton from '@material-ui/core/IconButton';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import {
+  FacebookShareButton as _FacebookShareButton,
+  LinkedinShareButton as _LinkedinShareButton,
+  TwitterShareButton as _TwitterShareButton,
+  WhatsappShareButton as _WhatsappShareButton,
+  TelegramShareButton as _TelegramShareButton,
+  FacebookIcon,
+  TwitterIcon,
+  LinkedinIcon,
+  WhatsappIcon,
+  TelegramIcon,
+} from 'react-share';
+import styled, { css } from 'styled-components';
+import CopyWithButton from '../../utils/CopyWithButton';
 
-const styles = {
-  buttonStyle: {
-    marginTop: '10px',
-    marginBottom: '0px',
-    fontSize: '15px',
-    fontWeight: 'bold',
-  },
-  raisedButtonStyle: {
-    margin: 20,
-    width: '240px',
-  },
-};
+const commonIconStyle = css`
+  margin-top: 1rem;
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+  outline: none;
+`;
 
-const classes = () => ({
-  twitter: {
-    backgroundColor: '#00aced',
-    '&:hover': {
-      backgroundColor: '#009CD5',
-    },
-  },
-  linkedin: {
-    backgroundColor: '#0077B5',
-    '&:hover': {
-      backgroundColor: '#006AA2',
-    },
-    facebook: {
-      backgroundColor: '#3B5998',
-      '&:hover': {
-        backgroundColor: '#354F88',
-      },
-    },
-  },
-});
+const ShareIconContainer = styled.div`
+  display: flex;
+  margin: 0.7rem 2.5rem;
+`;
 
-const initFacebookAPI = () => {
-  window.fbAsyncInit = () => {
-    window.FB.init({
-      appId: '136831073699181',
-      cookie: true,
-      xfbml: true,
-      version: 'v2.11',
-    });
-    window.FB.AppEvents.logPageView();
-  };
+const IconButton = styled(_IconButton)`
+  border-radius: 0.125rem;
+  padding: 0.5rem;
+  font-size: 1rem;
+`;
 
-  ((d, s, id) => {
-    if (d.getElementsByTagName(s)[0]) {
-      let js,
-        fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) {
-        return;
-      }
-      js = d.createElement(s);
-      js.id = id;
-      js.src = 'https://connect.facebook.net/en_US/sdk.js';
-      fjs.parentNode.insertBefore(js, fjs);
-    }
-  })(document, 'script', 'facebook-jssdk');
-};
+const FacebookShareButton = styled(_FacebookShareButton)`
+  ${commonIconStyle};
+`;
 
-const shareToFacebook = () => {
-  window.FB.ui(
-    {
-      method: 'share',
-      href: urls.CHAT_URL,
-      caption: 'SUSI by FOSSASIA',
-      hashtag: '#FOSSASIA',
-      quote: 'Lets chat with susi, the open source personal assistant',
-    },
-    response => {},
-  );
-};
+const LinkedinShareButton = styled(_LinkedinShareButton)`
+  ${commonIconStyle};
+`;
 
-const ShareOnSocialMedia = props => {
-  initFacebookAPI();
-  const { raisedButtonStyle } = styles;
-  const { classes } = props;
+const TwitterShareButton = styled(_TwitterShareButton)`
+  ${commonIconStyle};
+`;
+
+const WhatsappShareButton = styled(_WhatsappShareButton)`
+  ${commonIconStyle};
+`;
+
+const TelegramShareButton = styled(_TelegramShareButton)`
+  ${commonIconStyle};
+`;
+
+const ShareOnSocialMedia = () => {
+  const shareUrl = 'https://susi.ai';
+  const title = 'Lets chat with SUSI.AI, the open source personal assistant';
+  const shareText =
+    'Lets chat with SUSI.AI, the open source personal assistant https://susi.ai';
+
   return (
-    <SettingsTabWrapper heading="Share about SUSI.AI">
-      <div>
-        <div>
-          <TabHeading>
-            <Translate text="Share about SUSI on Facebook" />
-          </TabHeading>
-          <Button
-            color="primary"
-            className={classes.facebook}
-            onClick={shareToFacebook}
-            variant="contained"
-            style={raisedButtonStyle}
-          >
-            <Icon
-              style={{ marginRight: '0.6rem' }}
-              className="fa fa-facebook"
-            />
-            <Translate text="Share on Facebook" />
-          </Button>
-          <TabHeading>
-            <Translate text="Share about SUSI on Twitter" />
-          </TabHeading>
-          <Button
-            color="primary"
-            className={classes.twitter}
-            onClick={() =>
-              window.open(
-                'https://twitter.com/intent/tweet?text=Let%27s%20chat%20with%20SUSI,%20the%20Open%20Source%20personal%20assistant!%0Ahttps%3A%2F%2Fsusi.ai.%20It%27s%20awesome%20%23susiai!%0A@susiai_',
-                '_blank',
-              )
-            }
-            variant="contained"
-            style={raisedButtonStyle}
-          >
-            <Icon style={{ marginRight: '0.6rem' }} className="fa fa-twitter" />
-            <Translate text="Share on Twitter" />
-          </Button>
-          <TabHeading>
-            <Translate text="Share about SUSI on LinkedIn" />
-          </TabHeading>
-          <Button
-            color="primary"
-            className={classes.linkedin}
-            onClick={() =>
-              window.open(
-                'http://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fsusi.ai&title=Let%27s%20chat%20with%20SUSI,%20the%20Open%20Source%20personal%20assistant!%0Ahttps%3A%2F%2Fsusi.ai.%20It%27s%20awesome%20%23susiai!%0A@susiai&source=susi.ai',
-                '_blank',
-              )
-            }
-            variant="contained"
-            style={raisedButtonStyle}
-          >
-            <Icon
-              style={{ marginRight: '0.6rem' }}
-              className="fa fa-linkedin"
-            />
-            <Translate text="Share on Linkedin" />
-          </Button>
-        </div>
-      </div>
-    </SettingsTabWrapper>
+    <React.Fragment>
+      <DialogTitle>Share about SUSI</DialogTitle>
+
+      <CopyWithButton value={shareText} />
+      <ShareIconContainer>
+        <IconButton>
+          <FacebookShareButton url={shareUrl} quote={title}>
+            <div>
+              <FacebookIcon size={42} />
+            </div>
+          </FacebookShareButton>
+        </IconButton>
+        <IconButton>
+          <TwitterShareButton url={shareUrl} title={title}>
+            <div>
+              <TwitterIcon size={42} />
+            </div>
+          </TwitterShareButton>
+        </IconButton>
+        <IconButton>
+          <LinkedinShareButton url={shareUrl} title={title}>
+            <div>
+              <LinkedinIcon size={42} />
+            </div>
+          </LinkedinShareButton>
+        </IconButton>
+        <IconButton>
+          <WhatsappShareButton url={shareUrl} title={title}>
+            <div>
+              <WhatsappIcon size={42} />
+            </div>
+          </WhatsappShareButton>
+        </IconButton>
+        <IconButton>
+          <TelegramShareButton url={shareUrl} title={title}>
+            <div>
+              <TelegramIcon size={42} />
+            </div>
+          </TelegramShareButton>
+        </IconButton>
+      </ShareIconContainer>
+    </React.Fragment>
   );
 };
 
-ShareOnSocialMedia.propTypes = {
-  classes: PropTypes.object,
-};
-
-export default withStyles(classes)(ShareOnSocialMedia);
-
-// Resources:
-// https://developers.facebook.com/docs/facebook-login/web
-// https://developers.facebook.com/docs/sharing/reference/share-dialog
-// https://developers.facebook.com/docs/sharing/reference/feed-dialog
-// https://developers.facebook.com/docs/javascript/quickstart
+export default ShareOnSocialMedia;

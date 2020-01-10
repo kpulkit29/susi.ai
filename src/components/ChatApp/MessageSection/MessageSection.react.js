@@ -25,6 +25,7 @@ import _Close from '@material-ui/icons/Close';
 import _FullScreen from '@material-ui/icons/Fullscreen';
 import _FullScreenExit from '@material-ui/icons/FullscreenExit';
 import { IconButton as _IconButton } from '@material-ui/core';
+import ToolTip from '../../shared/ToolTip';
 
 const MessageList = styled.div`
   background: ${props => props.pane};
@@ -373,12 +374,7 @@ class MessageSection extends Component {
     const { showScrollBottom, showScrollTop, search } = this.state;
     if (this.scrollarea) {
       let scrollValues = this.scrollarea.getValues();
-      if (scrollValues.top >= 1) {
-        this.setState({
-          showScrollTop: true,
-          showScrollBottom: false,
-        });
-      } else if (scrollValues.top === 0) {
+      if (scrollValues.top === 0) {
         this.setState({
           showScrollTop: false,
           showScrollBottom: true,
@@ -386,6 +382,14 @@ class MessageSection extends Component {
       } else if (!(showScrollBottom && showScrollTop)) {
         this.setState({
           showScrollBottom: true,
+          showScrollTop: true,
+        });
+      } else if (
+        scrollValues.scrollHeight - Math.ceil(scrollValues.scrollTop) ===
+        scrollValues.clientHeight
+      ) {
+        this.setState({
+          showScrollBottom: false,
           showScrollTop: true,
         });
       }
@@ -402,7 +406,7 @@ class MessageSection extends Component {
     if (scrollBar) {
       scrollBar.view.scroll({
         top: scrollBar.getScrollHeight(),
-        behavior: 'auto',
+        behavior: 'smooth',
       });
     }
   };
@@ -758,15 +762,21 @@ class MessageSection extends Component {
           )}
           <CustomIconButton width={width}>
             {mode === 'fullScreen' ? (
-              <FullScreenExit onClick={this.openPreview} />
+              <ToolTip title="Exit full screen">
+                <FullScreenExit onClick={this.openPreview} />
+              </ToolTip>
             ) : (
-              <FullScreen onClick={this.openFullScreen} />
+              <ToolTip title="Full screen">
+                <FullScreen onClick={this.openFullScreen} />
+              </ToolTip>
             )}
           </CustomIconButton>
           <IconButton
             onClick={mode === 'fullScreen' ? this.handleClose : this.toggleChat}
           >
-            <Close />
+            <ToolTip title="Close">
+              <Close />
+            </ToolTip>
           </IconButton>
         </div>
       </ActionBar>

@@ -208,20 +208,8 @@ class MobileTab extends React.Component {
               />
             </PhoneCode>
             <Number>
-              <FormControl error={phoneNoError !== ''}>
-                <InputLabel
-                  style={
-                    theme === 'dark'
-                      ? {
-                          color: 'white',
-                        }
-                      : {
-                          color: 'rgba(0, 0, 0, 0.87)',
-                        }
-                  }
-                >
-                  Phone Number
-                </InputLabel>
+              <FormControl error={phoneNoError !== ''} disabled={loading}>
+                <InputLabel>Phone Number</InputLabel>
                 <Input
                   value={phoneNo}
                   style={

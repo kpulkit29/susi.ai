@@ -201,7 +201,9 @@ class ChangePassword extends Component {
       captchaResponse,
       showCaptchaErrorMessage,
     } = this.state;
-    const { actions, email } = this.props;
+    let { actions, email } = this.props;
+
+    email = email.toLowerCase();
 
     if (
       !(
@@ -280,24 +282,16 @@ class ChangePassword extends Component {
       <React.Fragment>
         <form autoComplete="false">
           <LabelContainer>Current Password</LabelContainer>
-          <PasswordField
-            name="password"
-            value={password}
-            style={
-              theme === 'dark'
-                ? {
-                    color: 'white',
-                    marginBottom: '20px',
-                  }
-                : {
-                    color: 'rgba(0, 0, 0, 0.87)',
-                    marginBottom: '20px',
-                  }
-            }
-            onChange={this.handleTextFieldChange}
-          />
+          <Form disabled={loading}>
+            <PasswordField
+              name="password"
+              value={password}
+              onChange={this.handleTextFieldChange}
+              style={{ marginBottom: '20px' }}
+            />{' '}
+          </Form>
           <LabelContainer>New Password</LabelContainer>
-          <Form error={newPasswordErrorMessage !== ''}>
+          <Form error={newPasswordErrorMessage !== ''} disabled={loading}>
             <PasswordField
               name="newPassword"
               placeholder="Must be between 8-64 characters"
@@ -323,7 +317,10 @@ class ChangePassword extends Component {
           </div>
           <LabelContainer>Verify Password</LabelContainer>
           <div>
-            <Form error={newPasswordConfirmErrorMessage !== ''}>
+            <Form
+              error={newPasswordConfirmErrorMessage !== ''}
+              disabled={loading}
+            >
               <PasswordField
                 name="confirmNewPassword"
                 placeholder="Must match the new password"

@@ -243,6 +243,14 @@ class AccountTab extends React.Component {
   handleSubmit = async () => {
     const { timeZone, prefLanguage, userName, avatarType } = this.state;
     const { actions, userEmailId } = this.props;
+    if (!(userName.trim().length > 0)) {
+      this.setState({
+        userNameError:
+          'A valid username is required before setting timezone or preferred language!',
+      });
+      return;
+    }
+
     let payload = {
       timeZone,
       prefLanguage,
@@ -348,7 +356,11 @@ class AccountTab extends React.Component {
             <TabHeading>
               <Translate text="User Name" />
             </TabHeading>
-            <FormControl error={userNameError !== ''}>
+            <FormControl
+              error={userNameError !== ''}
+              style={{ maxWidth: '250px' }}
+              disabled={loading}
+            >
               <OutlinedInput
                 labelWidth={0}
                 name="username"
@@ -401,7 +413,7 @@ class AccountTab extends React.Component {
             </TabHeading>
             <Select
               value={voiceOutput.voiceLang}
-              disabled={!this.TTSBrowserSupport}
+              disabled={!this.TTSBrowserSupport | loading}
               onChange={this.handlePrefLang}
               style={{ margin: '1rem 0' }}
             >
