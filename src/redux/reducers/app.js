@@ -59,9 +59,13 @@ export default handleActions(
         return { ...state };
       }
       let keyValueObj = {};
-      for (let [key, value] of Object.entries(keys)) {
-        keyValueObj = { ...keyValueObj, [key]: value.value };
+      
+      if(key) {
+        for (let [key, value] of Object.entries(keys)) {
+          keyValueObj = { ...keyValueObj, [key]: value.value };
+        }
       }
+
       return {
         ...state,
         apiKeys: { ...state.apiKeys, ...keyValueObj },
